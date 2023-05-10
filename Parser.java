@@ -8,13 +8,16 @@ import java.util.regex.Pattern;
 
 public class Parser {
     File root;
-    HashMap<String, ArrayList<String>> sent;
+    HashMap<String, ArrayList<String>> sent; 
     HashMap<String, ArrayList<String>> received;
+    HashMap<String, ArrayList<String>> graph;
 
+    
     public Parser(String filePath) {
         root = new File(filePath);
         sent = new HashMap<String, ArrayList<String>>();
         received = new HashMap<String, ArrayList<String>>();
+        graph = new HashMap<String, ArrayList<String>>();
 
     }
 
@@ -75,16 +78,27 @@ public class Parser {
         while (matcher.find()) {
             String recipient = matcher.group();
             if (sent.get(sender) != null) {
-                sent.get(sender).add(recipient);
-                if (!received.containsKey(recipient)) {
-                    received.put(recipient, new ArrayList<String>());
-                    received.get(recipient).add(sender);
-                }
-                else {
-                    received.get(recipient).add(sender);
-                }
-            } 
+                addToMap(recipient, sender);
+            }
         }
+    }
+
+    private void addToMap(String recipient, String sender) {
+        sent.get(sender).add(recipient);
+        if (!received.containsKey(recipient)) {
+            received.put(recipient, new ArrayList<String>());
+        }
+        received.get(recipient).add(sender);
+
+        if (!graph.containsKey(sender)) {
+            graph.put(sender, new ArrayList<String>());
+        }
+        graph.get(sender).add(recipient);
+
+        if (!graph.containsKey(recipient)) {
+            graph.put(recipient, new ArrayList<String>());
+        }
+        graph.get(recipient).add(sender);
     }
 
     public HashMap<String, ArrayList<String>> getSent() {
