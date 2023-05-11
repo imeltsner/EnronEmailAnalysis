@@ -10,14 +10,14 @@ public class Parser {
     File root;
     HashMap<String, ArrayList<String>> sent; 
     HashMap<String, ArrayList<String>> received;
-    HashMap<String, ArrayList<String>> graph;
+    HashMap<String, Vertex> graph;
 
     
     public Parser(String filePath) {
         root = new File(filePath);
         sent = new HashMap<String, ArrayList<String>>();
         received = new HashMap<String, ArrayList<String>>();
-        graph = new HashMap<String, ArrayList<String>>();
+        graph = new HashMap<>();
 
     }
 
@@ -52,7 +52,7 @@ public class Parser {
             if (line.startsWith("From:")) {
                sender = parseSender(line);
             }
-            else if (line.startsWith("To:") || line.startsWith("\t")) {
+            else if (line.startsWith("To:") || line.startsWith("\t") || line.startsWith("Bcc:") || line.startsWith("Cc:")) {
                 parseRecipient(line, sender);
             }
         }
@@ -65,9 +65,7 @@ public class Parser {
 
         if (matcher.find()) {
             sender = matcher.group();
-            if (!sent.containsKey(sender)) {
-                sent.put(sender, new ArrayList<String>());
-            }
+            graph.putIfAbsent(sender, new Vertex());
         }
         return sender;
     }
@@ -77,28 +75,32 @@ public class Parser {
 
         while (matcher.find()) {
             String recipient = matcher.group();
-            if (sent.get(sender) != null) {
-                addToMap(recipient, sender);
+            if (graph.get(sender) != null) {
+                addToGraph(recipient, sender);
             }
         }
     }
 
-    private void addToMap(String recipient, String sender) {
-        sent.get(sender).add(recipient);
-        if (!received.containsKey(recipient)) {
-            received.put(recipient, new ArrayList<String>());
-        }
-        received.get(recipient).add(sender);
+    private void addToGraph(String recipient, String sender) {
+        graph.putIfAbsent(recipient, new Vertex());
+        graph.get(recipient).addReceivedFrom(sender, graph.get(sender));
+        graph.get(sender).addSentTo(recipient, graph.get(recipient));
 
-        if (!graph.containsKey(sender)) {
-            graph.put(sender, new ArrayList<String>());
-        }
-        graph.get(sender).add(recipient);
+        // sent.get(sender).add(recipient);
+        // if (!received.containsKey(recipient)) {
+        //     received.put(recipient, new ArrayList<String>());
+        // }
+        // received.get(recipient).add(sender);
 
-        if (!graph.containsKey(recipient)) {
-            graph.put(recipient, new ArrayList<String>());
-        }
-        graph.get(recipient).add(sender);
+        // if (!graph.containsKey(sender)) {
+        //     graph.put(sender, new ArrayList<String>());
+        // }
+        // graph.get(sender).add(recipient);
+
+        // if (!graph.containsKey(recipient)) {
+        //     graph.put(recipient, new ArrayList<String>());
+        // }
+        // graph.get(recipient).add(sender);
     }
 
     public HashMap<String, ArrayList<String>> getSent() {
@@ -107,5 +109,9 @@ public class Parser {
 
     public HashMap<String, ArrayList<String>> getReceived() {
         return received;
+    }
+
+    public HashMap<String, Vertex> getGraph() {
+        return graph;
     }
 }

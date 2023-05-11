@@ -1,5 +1,4 @@
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -13,8 +12,7 @@ public class Driver {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        HashMap<String, ArrayList<String>> sent = parser.getSent();
-        HashMap<String, ArrayList<String>> received = parser.getReceived();
+        HashMap<String, Vertex> graph = parser.getGraph();
 
         Scanner scan = new Scanner(System.in);
         String cmd = new String();
@@ -24,12 +22,12 @@ public class Driver {
             if (cmd.equalsIgnoreCase("exit")) {
                 break;
             }
-            if (sent.get(cmd) == null && received.get(cmd) == null) {
+            if (graph.get(cmd) == null) {
                 System.out.println("Email Address (" + cmd + ") not found in the dataset");
             }
             else {
-                System.out.println("* " + cmd + " has sent messages to " + sent.get(cmd).size() + " others");
-                System.out.println("* " + cmd + " has received messages from " + received.get(cmd).size() + " others");
+                System.out.println("* " + cmd + " has sent messages to " + graph.get(cmd).getSentTo() + " others");
+                System.out.println("* " + cmd + " has received messages from " + graph.get(cmd).getReceivedFrom() + " others");
             }
         }
         scan.close();
