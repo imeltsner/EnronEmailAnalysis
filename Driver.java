@@ -2,6 +2,10 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * Reads and processes enron email data
+ * Outputs statistics based on user request
+ */
 public class Driver {
     public static void main(String[] args) {
         String filePath = args[0];
