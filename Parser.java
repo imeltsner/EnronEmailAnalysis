@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -8,15 +7,11 @@ import java.util.regex.Pattern;
 
 public class Parser {
     File root;
-    HashMap<String, ArrayList<String>> sent; 
-    HashMap<String, ArrayList<String>> received;
     HashMap<String, Vertex> graph;
 
     
     public Parser(String filePath) {
         root = new File(filePath);
-        sent = new HashMap<String, ArrayList<String>>();
-        received = new HashMap<String, ArrayList<String>>();
         graph = new HashMap<>();
 
     }
@@ -85,30 +80,6 @@ public class Parser {
         graph.putIfAbsent(recipient, new Vertex());
         graph.get(recipient).addReceivedFrom(sender, graph.get(sender));
         graph.get(sender).addSentTo(recipient, graph.get(recipient));
-
-        // sent.get(sender).add(recipient);
-        // if (!received.containsKey(recipient)) {
-        //     received.put(recipient, new ArrayList<String>());
-        // }
-        // received.get(recipient).add(sender);
-
-        // if (!graph.containsKey(sender)) {
-        //     graph.put(sender, new ArrayList<String>());
-        // }
-        // graph.get(sender).add(recipient);
-
-        // if (!graph.containsKey(recipient)) {
-        //     graph.put(recipient, new ArrayList<String>());
-        // }
-        // graph.get(recipient).add(sender);
-    }
-
-    public HashMap<String, ArrayList<String>> getSent() {
-        return sent;
-    }
-
-    public HashMap<String, ArrayList<String>> getReceived() {
-        return received;
     }
 
     public HashMap<String, Vertex> getGraph() {
