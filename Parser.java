@@ -88,7 +88,12 @@ public class Parser {
 
         if (matcher.find()) {
             sender = matcher.group();
-            graph.putIfAbsent(sender, new Vertex());
+            if (sender.contains("enron.com")) {
+                graph.putIfAbsent(sender, new Vertex());
+            }
+            else {
+                sender = null;
+            }
         }
         return sender;
     }
@@ -118,9 +123,11 @@ public class Parser {
      * @param sender
      */
     private void addToGraph(String recipient, String sender) {
-        graph.putIfAbsent(recipient, new Vertex());
-        graph.get(recipient).addReceivedFrom(sender, graph.get(sender));
-        graph.get(sender).addSentTo(recipient, graph.get(recipient));
+        if (recipient.contains("enron.com")) {
+            graph.putIfAbsent(recipient, new Vertex());
+            graph.get(recipient).addReceivedFrom(sender, graph.get(sender));
+            graph.get(sender).addSentTo(recipient, graph.get(recipient));
+        }
     }
 
     public HashMap<String, Vertex> getGraph() {
