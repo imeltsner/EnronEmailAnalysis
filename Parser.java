@@ -89,7 +89,7 @@ public class Parser {
         if (matcher.find()) {
             sender = matcher.group();
             if (sender.contains("enron.com")) {
-                graph.putIfAbsent(sender, new Vertex());
+                graph.putIfAbsent(sender, new Vertex(sender));
             }
             else {
                 sender = null;
@@ -124,7 +124,7 @@ public class Parser {
      */
     private void addToGraph(String recipient, String sender) {
         if (recipient.contains("enron.com")) {
-            graph.putIfAbsent(recipient, new Vertex());
+            graph.putIfAbsent(recipient, new Vertex(recipient));
             graph.get(recipient).addReceivedFrom(sender, graph.get(sender));
             graph.get(sender).addSentTo(recipient, graph.get(recipient));
         }

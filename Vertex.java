@@ -5,15 +5,21 @@ import java.util.HashMap;
  */
 public class Vertex {
     //class variables
+    String email;
     private HashMap<String, Vertex> connections;
     private int sentTo;
     private int receivedFrom;
+    private int dfsNum;
+    private int back;
 
     //Constructor
-    public Vertex() {
+    public Vertex(String email) {
+        this.email = email;
         this.connections = new HashMap<>();
         this.sentTo = 0;
         this.receivedFrom = 0;
+        this.dfsNum = -1;
+        this.back = -1;
     }
 
     /**
@@ -46,5 +52,26 @@ public class Vertex {
 
     public HashMap<String, Vertex> getConnections() {
         return connections;
+    }
+
+    public void setDFSNum(int n) {
+        dfsNum = n;
+        back = n;
+    }
+
+    public void setBack(int n) {
+        back = n;
+    }
+
+    public int getDFSNum() {
+        return dfsNum;
+    }
+
+    public int getBack() {
+        return back;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
