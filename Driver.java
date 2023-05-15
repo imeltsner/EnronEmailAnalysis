@@ -18,15 +18,21 @@ public class Driver {
         //read files and create graph
         String filePath = args[0];
         Parser parser = new Parser(filePath);
+        HashMap<String, Vertex> graph = new HashMap<>();
         try {
-            parser.traverse();
+            graph = parser.traverse();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
+        //error checking
+        if (graph.isEmpty()) {
+            System.out.println("ERROR MAKING GRAPH");
+            System.exit(0);
+        }
+
         //find connectors
-        HashMap<String, Vertex> graph = parser.getGraph();
         Searcher searcher = new Searcher(graph);
         if (args.length < 2) {
             searcher.findConnectors();

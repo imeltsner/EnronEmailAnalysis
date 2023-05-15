@@ -28,8 +28,10 @@ public class Parser {
      * Traverses filesytem
      * @throws FileNotFoundException
      */
-    public void traverse() throws FileNotFoundException {
+    public HashMap<String, Vertex> traverse() throws FileNotFoundException {
         traverse(root);
+        return graph;
+
     }
 
     /**
